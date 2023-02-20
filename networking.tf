@@ -15,9 +15,11 @@ resource "aws_subnet" "public-subnet" {
 
 # Create static IP for VPN
 resource "aws_eip" "ip-vpn" {
-  instance   = aws_instance.vpn.id
+  vpc                       = true
+  network_interface         = aws_network_interface.vpn.id
+  associate_with_private_ip = "100.69.0.114"
   depends_on = [
-    aws_instance.vpn
+    aws_network_interface.vpn
   ]
 }
 
@@ -45,6 +47,16 @@ resource "aws_route_table" "route-table-vpn" {
   vpc_id = aws_vpc.VPN_attached_network.id
 
   route {
+    cidr_block           = "100.69.14.0/24"
+    network_interface_id = aws_network_interface.vpn.id
+  }
+
+  route {
+    cidr_block           = "100.69.15.0/24"
+    network_interface_id = aws_network_interface.vpn.id
+  }
+
+  route {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.vpn-gw.id
   }
@@ -54,6 +66,7 @@ resource "aws_route_table" "route-table-vpn" {
   }
 
   depends_on   = [
+    aws_network_interface.vpn,
     aws_internet_gateway.vpn-gw
   ]
 }
