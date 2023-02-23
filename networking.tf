@@ -42,6 +42,15 @@ resource "aws_eip" "ip-gitlab" {
   ]
 }
 
+#Create statc IP for test machine
+resource "aws_eip" "ip-test" {
+  instance   = aws_instance.test.id
+  depends_on = [
+    aws_instance.test
+  ]
+}
+
+
 ## Create static IP for NAT
 #resource "aws_eip" "nat" {
 #  vpc = true 
