@@ -8,6 +8,11 @@ variable "subnet_CIDR" {
   default = "100.69.0.0/24"
 }
 
+variable "private_subnet_CIDR" {
+  type    = string
+  default = "100.69.1.0/24"
+}
+
 variable "vpc_zone" {
   type    = string
   default = "eu-central-1a"
@@ -57,3 +62,25 @@ variable "gitlab_disk_size" {
   type    = number
   default = 60
 }
+
+variable "runner_image" {
+  type    = string
+  default = "ami-0a291e69a75ba8cae"
+}
+
+variable "runner_machine_type" {
+  type    = string
+  default = "t3a.large"
+}
+
+variable "runner_disk_size" {
+  type    = number
+  default = 60
+}
+
+variable "runner_server_tag" {
+  type    = string
+  default = "gitlab runner"
+}
+
+

@@ -18,6 +18,15 @@ resource "aws_network_interface" "gitlab" {
   }
 }
 
+#resource "aws_network_interface" "runner" {
+#  subnet_id          = aws_subnet.private-subnet.id
+#  source_dest_check  = false
+#  security_groups    = [aws_security_group.ingress-all.id]
+#  tags = {
+#    Name = "runner_primary_interface"
+#  }
+#}
+
 resource "aws_instance" "vpn" {
   ami             = var.vpn_image
   instance_type   = var.vpn_machine_type
@@ -49,3 +58,19 @@ resource "aws_instance" "gitlab" {
         volume_size = var.gitlab_disk_size
   }
 }
+
+#resource "aws_instance" "runner" {
+#  ami               = var.runner_image
+#  instance_type     = var.runner_machine_type
+#  network_interface {
+#    network_interface_id = aws_network_interface.runner.id
+#    device_index         = 0
+#  }
+#  key_name          = var.ami_key_pair_name
+#  tags              = {
+#                        Purpose = var.runner_server_tag
+#                      }
+#  root_block_device  {
+#        volume_size = var.runner_disk_size
+#  }
+#}
