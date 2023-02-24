@@ -13,15 +13,15 @@ resource "aws_subnet" "public-subnet" {
   ]
 }
 
-## Create a Subnet for instances
-#resource "aws_subnet" "private-subnet" {
-#  cidr_block        = var.private_subnet_CIDR
-#  vpc_id            = aws_vpc.VPN_attached_network.id
-#  availability_zone = var.vpc_zone
-#  depends_on        = [
-#    aws_vpc.VPN_attached_network
-#  ]
-#}
+# Create a Subnet for instances
+resource "aws_subnet" "private-subnet" {
+  cidr_block        = var.private_subnet_CIDR
+  vpc_id            = aws_vpc.VPN_attached_network.id
+  availability_zone = var.vpc_zone
+  depends_on        = [
+    aws_vpc.VPN_attached_network
+  ]
+}
 
 
 # Create static IP for VPN
@@ -52,9 +52,9 @@ resource "aws_eip" "ip-test" {
 
 
 ## Create static IP for NAT
-#resource "aws_eip" "nat" {
-#  vpc = true 
-#}
+resource "aws_eip" "nat" {
+  vpc = true 
+}
 
 
 # Create Internet gateway for VPN
@@ -97,27 +97,27 @@ resource "aws_route_table" "route-table-vpn" {
   ]
 }
 
-## Create a routing table for for private subnet
-#resource "aws_route_table" "route-table-private" {
-#  vpc_id = aws_vpc.VPN_attached_network.id
-#  route {
-#    cidr_block           = "100.69.14.0/24"
-#    network_interface_id = aws_network_interface.vpn.id
-#  }
-#
-#  route {
-#    cidr_block           = "100.69.15.0/24"
-#    network_interface_id = aws_network_interface.vpn.id
-#  }
-#
-#  route {
-#    cidr_block = "0.0.0.0/0"
-#    gateway_id = aws_nat_gateway.vertep-nat.id
-#  }
-#  depends_on     = [
-#    aws_nat_gateway.vertep-nat
-#  ]
-#}
+# Create a routing table for for private subnet
+resource "aws_route_table" "route-table-private" {
+  vpc_id = aws_vpc.VPN_attached_network.id
+  route {
+    cidr_block           = "100.69.14.0/24"
+    network_interface_id = aws_network_interface.vpn.id
+  }
+
+  route {
+    cidr_block           = "100.69.15.0/24"
+    network_interface_id = aws_network_interface.vpn.id
+  }
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.vertep-nat.id
+  }
+  depends_on     = [
+    aws_nat_gateway.vertep-nat
+  ]
+}
 
 
 # Route table assositation
@@ -130,20 +130,20 @@ resource "aws_route_table_association" "subnet-association" {
   ]
 }
 
-#resource "aws_route_table_association" "private-subnet-association" {
-#subnet_id      = aws_subnet.private-subnet.id
-#  route_table_id = aws_route_table.route-table-private.id
-#
-#  depends_on     = [
-#    aws_route_table.route-table-private
-#  ]
-#}
+resource "aws_route_table_association" "private-subnet-association" {
+  subnet_id      = aws_subnet.private-subnet.id
+  route_table_id = aws_route_table.route-table-private.id
+
+  depends_on     = [
+    aws_route_table.route-table-private
+  ]
+}
 
 
-#resource "aws_nat_gateway" "vertep-nat" {
-#  allocation_id = aws_eip.nat.id
-#  subnet_id     = aws_subnet.private-subnet.id
-#  depends_on    = [
-#    aws_eip.nat
-#  ]
-#}
+resource "aws_nat_gateway" "vertep-nat" {
+  allocation_id = aws_eip.nat.id
+  subnet_id     = aws_subnet.public-subnet.id
+  depends_on    = [
+    aws_eip.nat
+  ]
+}
