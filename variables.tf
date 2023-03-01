@@ -122,24 +122,3 @@ variable "nats_server_tag" {
   type    = string
   default = "nats cluster"
 }
-##############
-variable "redmine_image" {
-  type    = string
-  default = "ami-0d1ddd83282187d18"
-}
-
-variable "redmine_machine_type" {
-  type    = string
-  default = "t3a.large"
-}
-
-variable "redmine_disk_size" {
-  type    = number
-  default = 60
-}
-
-variable "redmine_tag" {
-  type    = string
-  default = "redmine server"
-}
-
