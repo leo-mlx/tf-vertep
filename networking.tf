@@ -8,7 +8,7 @@ resource "aws_subnet" "public-subnet" {
   cidr_block        = var.subnet_CIDR
   vpc_id            = aws_vpc.VPN_attached_network.id
   availability_zone = var.vpc_zone
-  depends_on        = [
+  depends_on = [
     aws_vpc.VPN_attached_network
   ]
 }
@@ -18,7 +18,7 @@ resource "aws_subnet" "private-subnet" {
   cidr_block        = var.private_subnet_CIDR
   vpc_id            = aws_vpc.VPN_attached_network.id
   availability_zone = var.vpc_zone
-  depends_on        = [
+  depends_on = [
     aws_vpc.VPN_attached_network
   ]
 }
@@ -36,7 +36,7 @@ resource "aws_eip" "ip-vpn" {
 
 # Create static IP for Gitlab (will be removed later after VPN will start to work)
 resource "aws_eip" "ip-gitlab" {
-  instance   = aws_instance.gitlab.id
+  instance = aws_instance.gitlab.id
   depends_on = [
     aws_instance.gitlab
   ]
@@ -44,7 +44,7 @@ resource "aws_eip" "ip-gitlab" {
 
 #Create statc IP for test machine
 resource "aws_eip" "ip-test" {
-  instance   = aws_instance.test.id
+  instance = aws_instance.test.id
   depends_on = [
     aws_instance.test
   ]
@@ -53,17 +53,17 @@ resource "aws_eip" "ip-test" {
 
 ## Create static IP for NAT
 resource "aws_eip" "nat" {
-  vpc = true 
+  vpc = true
 }
 
 
 # Create Internet gateway for VPN
 resource "aws_internet_gateway" "vpn-gw" {
   vpc_id = aws_vpc.VPN_attached_network.id
-  tags   = {
+  tags = {
     Name = var.vpn_server_tag
   }
-  depends_on        = [
+  depends_on = [
     aws_vpc.VPN_attached_network
   ]
 }
@@ -91,7 +91,7 @@ resource "aws_route_table" "route-table-vpn" {
     Name = var.vpn_server_tag
   }
 
-  depends_on   = [
+  depends_on = [
     aws_network_interface.vpn,
     aws_internet_gateway.vpn-gw
   ]
@@ -111,10 +111,10 @@ resource "aws_route_table" "route-table-private" {
   }
 
   route {
-    cidr_block = "0.0.0.0/0"
+    cidr_block     = "0.0.0.0/0"
     nat_gateway_id = aws_nat_gateway.vertep-nat.id
   }
-  depends_on     = [
+  depends_on = [
     aws_nat_gateway.vertep-nat
   ]
 }
@@ -125,7 +125,7 @@ resource "aws_route_table_association" "subnet-association" {
   subnet_id      = aws_subnet.public-subnet.id
   route_table_id = aws_route_table.route-table-vpn.id
 
-  depends_on     = [
+  depends_on = [
     aws_route_table.route-table-vpn
   ]
 }
@@ -134,7 +134,7 @@ resource "aws_route_table_association" "private-subnet-association" {
   subnet_id      = aws_subnet.private-subnet.id
   route_table_id = aws_route_table.route-table-private.id
 
-  depends_on     = [
+  depends_on = [
     aws_route_table.route-table-private
   ]
 }
@@ -143,7 +143,7 @@ resource "aws_route_table_association" "private-subnet-association" {
 resource "aws_nat_gateway" "vertep-nat" {
   allocation_id = aws_eip.nat.id
   subnet_id     = aws_subnet.public-subnet.id
-  depends_on    = [
+  depends_on = [
     aws_eip.nat
   ]
 }

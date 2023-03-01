@@ -103,3 +103,22 @@ variable "test_server_tag" {
   default = "test server"
 }
 
+variable "nats_server_image" {
+  type    = string
+  default = "ami-0753d09c1c386f2b7"
+}
+
+variable "nats_server_type" {
+  type    = string
+  default = "t3a.large"
+}
+
+variable "nats_disk_size" {
+  type    = number
+  default = 60
+}
+
+variable "nats_server_tag" {
+  type    = string
+  default = "nats cluster"
+}

@@ -3,7 +3,7 @@ resource "aws_iam_group" "s3_group" {
 }
 
 resource "aws_iam_group_policy_attachment" "s3_group_policy" {
-  group = aws_iam_group.s3_group.name
+  group      = aws_iam_group.s3_group.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
 }
 
