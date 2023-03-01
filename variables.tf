@@ -37,7 +37,7 @@ variable "vpn_server_tag" {
   type    = string
   default = "VPN server"
 }
-
+################
 variable "gitlab_server_tag" {
   type    = string
   default = "Gitlab server"
@@ -62,7 +62,7 @@ variable "gitlab_disk_size" {
   type    = number
   default = 60
 }
-
+##############
 variable "runner_image" {
   type    = string
   default = "ami-0a291e69a75ba8cae"
@@ -82,7 +82,7 @@ variable "runner_server_tag" {
   type    = string
   default = "gitlab runner"
 }
-
+###############
 variable "test_machine_image" {
   type    = string
   default = "ami-0d6adc6af818f43fb"
@@ -102,7 +102,7 @@ variable "test_server_tag" {
   type    = string
   default = "test server"
 }
-
+#################
 variable "nats_server_image" {
   type    = string
   default = "ami-0753d09c1c386f2b7"
@@ -122,3 +122,24 @@ variable "nats_server_tag" {
   type    = string
   default = "nats cluster"
 }
+##############
+variable "redmine_image" {
+  type    = string
+  default = "ami-0d1ddd83282187d18"
+}
+
+variable "redmine_machine_type" {
+  type    = string
+  default = "t3a.large"
+}
+
+variable "redmine_disk_size" {
+  type    = number
+  default = 60
+}
+
+variable "redmine_tag" {
+  type    = string
+  default = "redmine server"
+}
+

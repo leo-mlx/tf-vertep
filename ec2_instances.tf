@@ -18,6 +18,17 @@ resource "aws_network_interface" "gitlab" {
   }
 }
 
+resource "aws_network_interface" "redmine" {
+  subnet_id         = aws_subnet.public-subnet.id
+  source_dest_check = false
+  private_ips       = ["100.69.0.137"]
+  security_groups   = [aws_security_group.ingress-all.id]
+  tags = {
+    Name = "redmine_primary_interface"
+  }
+}
+
+
 resource "aws_network_interface" "test" {
   subnet_id         = aws_subnet.public-subnet.id
   source_dest_check = false
@@ -180,3 +191,21 @@ resource "aws_instance" "nats3" {
   }
 }
 ##################################
+
+#creating instance for redmine
+resource "aws_instance" "redmine" {
+  ami           = var.redmine_image
+  instance_type = var.redmine_machine_type
+  network_interface {
+    network_interface_id = aws_network_interface.redmine.id
+    device_index         = 0
+  }
+  key_name = var.ami_key_pair_name
+  tags = {
+    Purpose = var.redmine_tag
+  }
+  root_block_device {
+    volume_size = var.redmine_disk_size
+  }
+}
+

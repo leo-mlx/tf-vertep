@@ -50,6 +50,13 @@ resource "aws_eip" "ip-test" {
   ]
 }
 
+#Create statc IP for redmine machine
+resource "aws_eip" "redmine" {
+  instance = aws_instance.redmine.id
+  depends_on = [
+    aws_instance.redmine
+  ]
+}
 
 ## Create static IP for NAT
 resource "aws_eip" "nat" {
