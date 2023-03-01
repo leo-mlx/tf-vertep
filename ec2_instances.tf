@@ -37,32 +37,69 @@ resource "aws_network_interface" "runner" {
   }
 }
 
-#Creating interfaces for NATS cluster
-resource "aws_network_interface" "nats1" {
+#Creating  NATS cluster
+resource "aws_network_interface" "nats" {
+  for_each = var.nats_cluster
 
   subnet_id         = aws_subnet.private-subnet.id
   source_dest_check = false
+  private_ips       = [format("%s", each.value)]
   security_groups   = [aws_security_group.ingress-all.id]
   tags = {
-    Name = "nats1_primary_interface"
+    Name = format("%s_primary_interface", each.key)
   }
 }
 
-resource "aws_network_interface" "nats2" {
-  subnet_id         = aws_subnet.private-subnet.id
-  source_dest_check = false
-  security_groups   = [aws_security_group.ingress-all.id]
+resource "aws_instance" "nats" {
+  for_each = var.nats_cluster
+
+  #  host_id = each.key
+  ami           = var.nats_server_image
+  instance_type = var.nats_server_type
+  network_interface {
+    network_interface_id = aws_network_interface.nats[each.key].id
+    device_index         = 0
+  }
+  key_name = var.ami_key_pair_name
   tags = {
-    Name = "nats2_primary_interface"
+    Purpose = var.nats_server_tag
+  }
+  root_block_device {
+    volume_size = var.nats_disk_size
   }
 }
+######################################
 
-resource "aws_network_interface" "nats3" {
+#Creating Mongo cluster
+resource "aws_network_interface" "mongo" {
+  for_each = var.mongo_cluster
+
   subnet_id         = aws_subnet.private-subnet.id
   source_dest_check = false
+  private_ips       = [format("%s", each.value)]
   security_groups   = [aws_security_group.ingress-all.id]
   tags = {
-    Name = "nats3_primary_interface"
+    Name = format("%s_primary_interface", each.key)
+  }
+
+}
+
+resource "aws_instance" "mongo" {
+  for_each = var.mongo_cluster
+
+  #  host_id       = each.key
+  ami           = var.mongo_server_image
+  instance_type = var.mongo_server_type
+  network_interface {
+    network_interface_id = aws_network_interface.mongo[each.key].id
+    device_index         = 0
+  }
+  key_name = var.ami_key_pair_name
+  tags = {
+    Purpose = var.mongo_server_tag
+  }
+  root_block_device {
+    volume_size = var.mongo_disk_size
   }
 }
 ######################################
@@ -130,53 +167,3 @@ resource "aws_instance" "runner" {
     volume_size = var.runner_disk_size
   }
 }
-
-#Creating NATS cluster with 3 VMs
-resource "aws_instance" "nats1" {
-  ami           = var.nats_server_image
-  instance_type = var.nats_server_type
-  network_interface {
-    network_interface_id = aws_network_interface.nats1.id
-    device_index         = 0
-  }
-  key_name = var.ami_key_pair_name
-  tags = {
-    Purpose = var.nats_server_tag
-  }
-  root_block_device {
-    volume_size = var.nats_disk_size
-  }
-}
-
-resource "aws_instance" "nats2" {
-  ami           = var.nats_server_image
-  instance_type = var.nats_server_type
-  network_interface {
-    network_interface_id = aws_network_interface.nats2.id
-    device_index         = 0
-  }
-  key_name = var.ami_key_pair_name
-  tags = {
-    Purpose = var.nats_server_tag
-  }
-  root_block_device {
-    volume_size = var.nats_disk_size
-  }
-}
-
-resource "aws_instance" "nats3" {
-  ami           = var.nats_server_image
-  instance_type = var.nats_server_type
-  network_interface {
-    network_interface_id = aws_network_interface.nats3.id
-    device_index         = 0
-  }
-  key_name = var.ami_key_pair_name
-  tags = {
-    Purpose = var.nats_server_tag
-  }
-  root_block_device {
-    volume_size = var.nats_disk_size
-  }
-}
-##################################

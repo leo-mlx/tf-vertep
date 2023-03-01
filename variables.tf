@@ -122,3 +122,52 @@ variable "nats_server_tag" {
   type    = string
   default = "nats cluster"
 }
+
+variable "nats_cluster" {
+  type = map(any)
+  default = {
+    "nats1" = "100.69.1.111"
+    "nats2" = "100.69.1.19"
+    "nats3" = "100.69.1.28"
+  }
+}
+#################
+variable "mongo_server_image" {
+  type    = string
+  default = "ami-0d1ddd83282187d18"
+}
+
+variable "mongo_server_type" {
+  type    = string
+  default = "t3a.large"
+}
+
+variable "mongo_disk_size" {
+  type    = number
+  default = 20
+}
+
+variable "mongo_server_tag" {
+  type    = string
+  default = "mongo cluster"
+}
+
+variable "mongo_volume_size" {
+  type    = string
+  default = 100
+}
+
+variable "mongo_cluster" {
+  type = map(any)
+  default = {
+    "mongo1" = "100.69.1.30"
+    "mongo2" = "100.69.1.31"
+    "mongo3" = "100.69.1.32"
+  }
+}
+##################
+
+variable "volume_zone" {
+  type    = string
+  default = "eu-central-1a"
+}
