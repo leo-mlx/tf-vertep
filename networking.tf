@@ -82,12 +82,6 @@ resource "aws_route_table" "route-table-vpn" {
   }
 
   route {
-    cidr_block           = "100.69.16.0/24"
-    network_interface_id = aws_network_interface.vpn.id
-  }
-
-
-  route {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.vpn-gw.id
   }
@@ -114,12 +108,6 @@ resource "aws_route_table" "route-table-private" {
     cidr_block           = "100.69.15.0/24"
     network_interface_id = aws_network_interface.vpn.id
   }
-
-  route {
-    cidr_block           = "100.69.16.0/24"
-    network_interface_id = aws_network_interface.vpn.id
-  }
-
 
   route {
     cidr_block     = "0.0.0.0/0"
