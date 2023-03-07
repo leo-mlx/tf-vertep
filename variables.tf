@@ -166,6 +166,26 @@ variable "mongo_cluster" {
   }
 }
 ##################
+variable "lfront_server_image" {
+  type    = string
+  default = "ami-0d1ddd83282187d18"
+}
+
+variable "lfront_server_type" {
+  type    = string
+  default = "t3a.large"
+}
+
+variable "lfront_disk_size" {
+  type    = number
+  default = 20
+}
+
+variable "lfront_server_tag" {
+  type    = string
+  default = "legacy frontend"
+}
+##################
 
 variable "volume_zone" {
   type    = string

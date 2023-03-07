@@ -37,6 +37,16 @@ resource "aws_network_interface" "runner" {
   }
 }
 
+resource "aws_network_interface" "lfront" {
+  subnet_id         = aws_subnet.public-subnet.id
+  source_dest_check = false
+  private_ips       = ["100.69.0.116"]
+  security_groups   = [aws_security_group.ingress-all.id]
+  tags = {
+    Name = "lfront_primary_interface"
+  }
+}
+
 #Creating  NATS cluster
 resource "aws_network_interface" "nats" {
   for_each = var.nats_cluster
@@ -165,5 +175,21 @@ resource "aws_instance" "runner" {
   }
   root_block_device {
     volume_size = var.runner_disk_size
+  }
+}
+
+resource "aws_instance" "lfront" {
+  ami           = var.lfront_server_image
+  instance_type = var.lfront_server_type
+  network_interface {
+    network_interface_id = aws_network_interface.lfront.id
+    device_index         = 0
+  }
+  key_name = var.ami_key_pair_name
+  tags = {
+    Purpose = var.lfront_server_tag
+  }
+  root_block_device {
+    volume_size = var.lfront_disk_size
   }
 }

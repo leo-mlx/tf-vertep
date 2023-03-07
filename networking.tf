@@ -42,11 +42,19 @@ resource "aws_eip" "ip-gitlab" {
   ]
 }
 
-#Create statc IP for test machine
+#Create static IP for test machine
 resource "aws_eip" "ip-test" {
   instance = aws_instance.test.id
   depends_on = [
     aws_instance.test
+  ]
+}
+
+#Create static IP for legacy frontend
+resource "aws_eip" "ip-lfront" {
+  instance = aws_instance.lfront.id
+  depends_on = [
+    aws_instance.lfront
   ]
 }
 
