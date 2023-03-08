@@ -186,6 +186,26 @@ variable "lfront_server_tag" {
   default = "legacy frontend"
 }
 ##################
+variable "zabbix_server_image" {
+  type    = string
+  default = "ami-0d1ddd83282187d18"
+}
+
+variable "zabbix_server_type" {
+  type    = string
+  default = "t3a.large"
+}
+
+variable "zabbix_disk_size" {
+  type    = number
+  default = 100
+}
+
+variable "zabbix_server_tag" {
+  type    = string
+  default = "zabbix server"
+}
+##################
 
 variable "volume_zone" {
   type    = string

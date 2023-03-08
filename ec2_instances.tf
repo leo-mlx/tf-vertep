@@ -47,6 +47,16 @@ resource "aws_network_interface" "lfront" {
   }
 }
 
+resource "aws_network_interface" "zabbix" {
+  subnet_id         = aws_subnet.private-subnet.id
+  source_dest_check = false
+  private_ips       = ["100.69.1.20"]
+  security_groups   = [aws_security_group.ingress-all.id]
+  tags = {
+    Name = "zabbix_primary_interface"
+  }
+}
+
 #Creating  NATS cluster
 resource "aws_network_interface" "nats" {
   for_each = var.nats_cluster
@@ -191,5 +201,21 @@ resource "aws_instance" "lfront" {
   }
   root_block_device {
     volume_size = var.lfront_disk_size
+  }
+}
+
+resource "aws_instance" "zabbix" {
+  ami           = var.zabbix_server_image
+  instance_type = var.zabbix_server_type
+  network_interface {
+    network_interface_id = aws_network_interface.zabbix.id
+    device_index         = 0
+  }
+  key_name = var.ami_key_pair_name
+  tags = {
+    Purpose = var.zabbix_server_tag
+  }
+  root_block_device {
+    volume_size = var.zabbix_disk_size
   }
 }
