@@ -90,7 +90,7 @@ variable "test_machine_image" {
 
 variable "test_machine_type" {
   type    = string
-  default = "t3a.large"
+  default = "t3a.xlarge"
 }
 
 variable "test_disk_size" {
