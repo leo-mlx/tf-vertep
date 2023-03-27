@@ -42,6 +42,14 @@ resource "aws_eip" "ip-gitlab" {
   ]
 }
 
+##Create static IP for deploy_foundary, should be replaced with aws_eip.test after production deploy (limit exceeded)
+#resource "aws_eip" "deploy_foundary-temp" {
+#  instance = aws_instance.deploy_foundary.id
+#  depends_on = [
+#    aws_instance.deploy_foundary
+#  ]
+#}
+
 #Create static IP for test machine
 resource "aws_eip" "ip-test" {
   instance = aws_instance.test.id

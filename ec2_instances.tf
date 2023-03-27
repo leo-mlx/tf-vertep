@@ -122,8 +122,64 @@ resource "aws_instance" "mongo" {
     volume_size = var.mongo_disk_size
   }
 }
-######################################
 
+###################################### Adding deploy instances and interfaces
+resource "aws_network_interface" "deploy_foundary" {
+  subnet_id         = aws_subnet.private-subnet.id
+  source_dest_check = false
+  private_ips       = [var.deploy_foundary]
+  security_groups   = [aws_security_group.ingress-all.id]
+  tags = {
+    Name = var.deploy_foundary_server_tag
+  }
+}
+
+resource "aws_network_interface" "deploy" {
+  for_each = var.deploy_cluster
+
+  subnet_id         = aws_subnet.private-subnet.id
+  source_dest_check = false
+  private_ips       = [format("%s", each.value)]
+  security_groups   = [aws_security_group.ingress-all.id]
+  tags = {
+    Name = format("%s_primary_interface", each.key)
+  }
+}
+
+resource "aws_instance" "deploy" {
+  for_each = var.deploy_cluster
+
+  ami           = var.deploy_instance_image
+  instance_type = var.deploy_server_type
+  network_interface {
+    network_interface_id = aws_network_interface.deploy[each.key].id
+    device_index         = 0
+  }
+  key_name = var.ami_key_pair_name
+  tags = {
+    Purpose = var.deploy_server_tag
+  }
+  root_block_device {
+    volume_size = var.deploy_disk_size
+  }
+}
+
+resource "aws_instance" "deploy_foundary" {
+  ami           = var.deploy_instance_image
+  instance_type = var.deploy_foundary_server_type
+  network_interface {
+    network_interface_id = aws_network_interface.deploy_foundary.id
+    device_index         = 0
+  }
+  key_name = var.ami_key_pair_name
+  tags = {
+    Purpose = var.deploy_server_tag
+  }
+  root_block_device {
+    volume_size = var.deploy_disk_size
+  }
+}
+######################################
 resource "aws_instance" "vpn" {
   ami           = var.vpn_image
   instance_type = var.vpn_machine_type
