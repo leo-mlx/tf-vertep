@@ -5,6 +5,14 @@ resource "aws_lb_target_group" "vertep-group" {
   vpc_id   = aws_vpc.VPN_attached_network.id
 }
 
+resource "aws_lb_target_group" "vertep-group-ssl" {
+  name     = "vertep-lb-group-ssl"
+  port     = var.vertep-port-ssl
+  protocol = "TCP"
+  vpc_id   = aws_vpc.VPN_attached_network.id
+}
+
+
 resource "aws_lb_target_group_attachment" "vertep-att" {
   for_each = var.deploy_cluster
 
@@ -16,7 +24,7 @@ resource "aws_lb_target_group_attachment" "vertep-att" {
 resource "aws_lb_target_group_attachment" "vertep-att-ssl" {
   for_each = var.deploy_cluster
 
-  target_group_arn = aws_lb_target_group.vertep-group.arn
+  target_group_arn = aws_lb_target_group.vertep-group-ssl.arn
   target_id        = aws_instance.deploy[each.key].id
   port             = var.vertep-port-ssl
 }
@@ -49,6 +57,6 @@ resource "aws_lb_listener" "vertep-listener-ssl" {
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.vertep-group.arn
+    target_group_arn = aws_lb_target_group.vertep-group-ssl.arn
   }
 }
