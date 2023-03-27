@@ -206,8 +206,60 @@ variable "zabbix_server_tag" {
   default = "zabbix server"
 }
 ##################
+variable "deploy_instance_image" {
+  type    = string
+  default = "ami-0d1ddd83282187d18"
+}
 
+variable "deploy_server_type" {
+  type    = string
+  default = "t3a.large"
+}
+
+variable "deploy_disk_size" {
+  type    = number
+  default = 100
+}
+
+variable "deploy_server_tag" {
+  type    = string
+  default = "deploy server"
+}
+
+variable "deploy_foundary_server_type" {
+  type    = string
+  default = "t2.medium"
+}
+
+variable "deploy_foundary_server_tag" {
+  type    = string
+  default = "deploy server for foundary"
+}
+
+variable "deploy_cluster" {
+  type = map(any)
+  default = {
+    "deploy1" = "100.69.1.41"
+    "deploy2" = "100.69.1.42"
+  }
+}
+
+variable "deploy_foundary" {
+  type    = string
+  default = "100.69.1.40"
+}
+##################
 variable "volume_zone" {
   type    = string
   default = "eu-central-1a"
+}
+
+variable "vertep-port-ssl" {
+  type    = string
+  default = "443"
+}
+
+variable "vertep-port" {
+  type    = string
+  default = "80"
 }
