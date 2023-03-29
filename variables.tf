@@ -82,26 +82,6 @@ variable "runner_server_tag" {
   type    = string
   default = "gitlab runner"
 }
-###############
-variable "test_machine_image" {
-  type    = string
-  default = "ami-0d6adc6af818f43fb"
-}
-
-variable "test_machine_type" {
-  type    = string
-  default = "t3a.xlarge"
-}
-
-variable "test_disk_size" {
-  type    = number
-  default = 60
-}
-
-variable "test_server_tag" {
-  type    = string
-  default = "test server"
-}
 #################
 variable "nats_server_image" {
   type    = string

@@ -18,16 +18,6 @@ resource "aws_network_interface" "gitlab" {
   }
 }
 
-resource "aws_network_interface" "test" {
-  subnet_id         = aws_subnet.public-subnet.id
-  source_dest_check = false
-  private_ips       = ["100.69.0.115"]
-  security_groups   = [aws_security_group.ingress-all.id]
-  tags = {
-    Name = "test_primary_interface"
-  }
-}
-
 resource "aws_network_interface" "runner" {
   subnet_id         = aws_subnet.private-subnet.id
   source_dest_check = false
@@ -209,22 +199,6 @@ resource "aws_instance" "gitlab" {
   }
   root_block_device {
     volume_size = var.gitlab_disk_size
-  }
-}
-
-resource "aws_instance" "test" {
-  ami           = var.test_machine_image
-  instance_type = var.test_machine_type
-  network_interface {
-    network_interface_id = aws_network_interface.test.id
-    device_index         = 0
-  }
-  key_name = var.ami_key_pair_name
-  tags = {
-    Purpose = var.test_server_tag
-  }
-  root_block_device {
-    volume_size = var.test_disk_size
   }
 }
 
