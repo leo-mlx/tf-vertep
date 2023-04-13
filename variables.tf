@@ -119,7 +119,7 @@ variable "mongo_server_image" {
 
 variable "mongo_server_type" {
   type    = string
-  default = "t3a.large"
+  default = "m6i.large"
 }
 
 variable "mongo_disk_size" {
