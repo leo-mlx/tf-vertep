@@ -173,7 +173,7 @@ variable "zabbix_server_image" {
 
 variable "zabbix_server_type" {
   type    = string
-  default = "t3a.large"
+  default = "m6i.large"
 }
 
 variable "zabbix_disk_size" {
