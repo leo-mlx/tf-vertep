@@ -37,50 +37,10 @@ variable "vpn_server_tag" {
   type    = string
   default = "VPN server"
 }
-################
-variable "gitlab_server_tag" {
-  type    = string
-  default = "Gitlab server"
-}
-
-variable "gitlab_image" {
-  type    = string
-  default = "ami-0913ce6e95f845f29"
-}
-
-variable "gitlab_machine_type" {
-  type    = string
-  default = "t3a.large"
-}
 
 variable "vpn_disk_size" {
   type    = number
   default = 20
-}
-
-variable "gitlab_disk_size" {
-  type    = number
-  default = 60
-}
-##############
-variable "runner_image" {
-  type    = string
-  default = "ami-0a291e69a75ba8cae"
-}
-
-variable "runner_machine_type" {
-  type    = string
-  default = "t3a.large"
-}
-
-variable "runner_disk_size" {
-  type    = number
-  default = 60
-}
-
-variable "runner_server_tag" {
-  type    = string
-  default = "gitlab runner"
 }
 #################
 variable "nats_server_image" {
