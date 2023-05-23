@@ -34,13 +34,6 @@ resource "aws_eip" "ip-vpn" {
   ]
 }
 
-## Create static IP for Gitlab (will be removed later after VPN will start to work)
-#resource "aws_eip" "ip-gitlab" {
-#  instance = aws_instance.gitlab.id
-#  depends_on = [
-#    aws_instance.gitlab
-#  ]
-#}
 
 #Create static IP for legacy frontend
 resource "aws_eip" "ip-lfront" {

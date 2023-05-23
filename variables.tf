@@ -126,26 +126,6 @@ variable "lfront_server_tag" {
   default = "legacy frontend"
 }
 ##################
-variable "zabbix_server_image" {
-  type    = string
-  default = "ami-0d1ddd83282187d18"
-}
-
-variable "zabbix_server_type" {
-  type    = string
-  default = "m6i.large"
-}
-
-variable "zabbix_disk_size" {
-  type    = number
-  default = 100
-}
-
-variable "zabbix_server_tag" {
-  type    = string
-  default = "zabbix server"
-}
-##################
 variable "deploy_instance_image" {
   type    = string
   default = "ami-0d1ddd83282187d18"
